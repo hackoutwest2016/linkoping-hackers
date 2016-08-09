@@ -30,10 +30,12 @@ import android.widget.TextView;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
+import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
+import com.spotify.sdk.android.player.Spotify;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -53,7 +55,8 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
     private static final String CLIENT_ID = "8740928683fe4ab6be03091a875ac618";
     // TODO: Replace with your redirect URI
     private static final String REDIRECT_URI = "swipeefy://callback";
-    private Context context = this;
+    private Context context;
+    private LoginActivity loginActivity = this;
     private static final int REQUEST_CODE = 0;
 
 
@@ -72,14 +75,14 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    //private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private SessionManager sessionManager;
+   // private SessionManager sessionManager;
     private TextView errorMessage;
     private String errorInvalid, errorFailed, error;
 
@@ -89,12 +92,12 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        errorMessage = (TextView) findViewById(R.id.text_error_message);
+        context = getApplicationContext();
+        /*errorMessage = (TextView) findViewById(R.id.text_error_message);
         errorInvalid = getResources().getString(R.string.error_invalid_user_credentials);
         errorFailed = getResources().getString(R.string.error_connection_failed);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.prompt_email);
-        populateAutoComplete();
         mEmailView.setText("alexander@46elks.com");
 
         mPasswordView = (EditText) findViewById(R.id.prompt_password);
@@ -115,14 +118,22 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        Button loginButton;
+        */Button loginButton;
         Button signupButton;
 
         loginButton =  (Button) (findViewById(R.id.action_login));
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptLogin();
+                AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
+                        AuthenticationResponse.Type.TOKEN,
+                        REDIRECT_URI);
+                builder.setScopes(new String[]{});
+                AuthenticationRequest request = builder.build();
+
+                AuthenticationClient.openLoginActivity(loginActivity, REQUEST_CODE, request);
+
+                //attemptLogin();
                 //checkFirstTimeUser();
                 //Intent intent = new Intent(context, TabLayoutActivity.class);
                 //startActivity(intent);
@@ -130,7 +141,7 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
             }
         });
 
-        signupButton =  (Button) (findViewById(R.id.action_sign_up));
+        /*signupButton =  (Button) (findViewById(R.id.action_sign_up));
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,17 +149,7 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
                 startActivity(intent);
 
             }
-        });
-
-        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
-                AuthenticationResponse.Type.TOKEN,
-                REDIRECT_URI);
-        builder.setScopes(new String[]{"user-read-private", "streaming"});
-        AuthenticationRequest request = builder.build();
-
-        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
-        AttributeSet attr;
-        TypedArray array = this.obtainStyledAttributes(attr, R.styleable.)
+        });*/
     }
 
     @Override
@@ -159,20 +160,11 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
-                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
-                mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-                    @Override
-                    public void onInitialized(Player player) {
-                        mPlayer.addConnectionStateCallback(MainActivity.this);
-                        mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                        mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
-                    }
+                SessionManager sessionManager = new SessionManager();
+                sessionManager.createLoginSession(context, response.getAccessToken());
 
-                    @Override
-                    public void onError(Throwable throwable) {
-                        Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
-                    }
-                });
+                Intent intentLogin = new Intent(this, SwiperActivity.class);
+                startActivity(intentLogin);
             }
         }
     }
@@ -195,7 +187,6 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
     @Override
     public void onTemporaryError() {
         Log.d("MainActivity", "Temporary error occurred");
-        String testGit;
     }
 
     @Override
@@ -230,56 +221,13 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
         super.onDestroy();
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    /*private void attemptLogin() {
         if (mAuthTask != null) {
             return;
         }
@@ -339,22 +287,6 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
         return password.length() > 4;
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
 
     @Override
     public void onBackPressed() {
@@ -363,47 +295,12 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
         this.moveTaskToBack(true);
     }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
+        /*
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
@@ -510,5 +407,5 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
             mAuthTask = null;
             //showProgress(false);
         }
-    }
+    }*/
 }
