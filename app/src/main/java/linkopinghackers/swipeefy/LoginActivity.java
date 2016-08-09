@@ -195,6 +195,7 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
     @Override
     public void onTemporaryError() {
         Log.d("MainActivity", "Temporary error occurred");
+        String testGit;
     }
 
     @Override
