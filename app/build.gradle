@@ -43,4 +43,6 @@ dependencies {
 
     compile (name:'android-card-stack-0.1.5', ext:'aar')
     compile 'com.mcxiaoke.volley:library:1.0.0'
+    compile 'com.android.support:design:24.0.0'
+
 }

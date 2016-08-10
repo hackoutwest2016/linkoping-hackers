@@ -26,6 +26,8 @@ public boolean swipeStart(int direction, float distance) {
         return true;
         }
 
+
+
 @Override
 public boolean swipeContinue(int direction, float distanceX, float distanceY) {
 
@@ -34,6 +36,7 @@ public boolean swipeContinue(int direction, float distanceX, float distanceY) {
 
 @Override
 public void discarded(int id, int direction) {
+
         //this callback invoked when dismiss animation is finished.
         }
 
