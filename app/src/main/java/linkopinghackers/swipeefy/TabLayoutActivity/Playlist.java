@@ -24,4 +24,6 @@ public class Playlist {
     public Bitmap getImage() throws IOException {
         return image;
     }
+
+    public String getSongList () {return uri;}
 }

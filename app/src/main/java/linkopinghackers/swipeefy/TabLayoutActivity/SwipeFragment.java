@@ -65,6 +65,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
     private ImageButton previous, pause, play, next;
     private String playURI;
     public List<Playlist> playlistlist = new ArrayList();
+    private SwipeFragment swipeFragment = this;
 
     // Container Activity must implement this interface
    /* public interface OnEventStartedListener {
@@ -105,7 +106,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
             public void onInitialized(Player player) {
                 mPlayer.addConnectionStateCallback(SwipeFragment.this);
                 mPlayer.addPlayerNotificationCallback(SwipeFragment.this);
-                mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
+                //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
 
 
             }
@@ -213,9 +214,6 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
             mCardAdapter.add(playlist1);
 
         }
-
-
-
     }
 
     @Override
@@ -245,7 +243,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPlayer.play(playURI);
+                mPlayer.play(playlistlist.get(mCardStack.getCurrIndex()).getSongList());
             }
         });
 
@@ -262,12 +260,23 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         mCardStack.setStackMargin(20);
 
         mCardAdapter = new CardsDataAdapter(getActivity().getApplicationContext(),0);
-//        mCardAdapter.add(R.drawable.swipeefy);
 
-        mCardStack.setListener(new CardStackListener());
+
+        mCardStack.setListener(new CardStackListener(swipeFragment, mCardStack));
 
         mCardStack.setAdapter(mCardAdapter);
 
+
+
+    }
+
+    public void onDiscard(int i){
+        Playlist discarded = playlistlist.get(i);
+        //SKICKA TILL FAVOURITES OM DIRECTION = HÖGER
+        fragmentCommunicator.addPlaylistToFavourites(discarded);
+
+        playlistlist.remove(discarded);
+        play.performClick();
 
     }
 

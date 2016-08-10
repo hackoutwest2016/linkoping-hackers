@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -58,9 +59,8 @@ public class FavouritesFragment extends Fragment{
         values.add( "Android List View2");
 
         values.add("Android List View3");
-        ArrayList<Playlist> playlists = new Array;
+        ArrayList<Playlist> playlists = new ArrayList<>();
 
-        PlaylistAdapter adapter = new PlaylistAdapter(getContext(), android.R.layout.simple_list_item_1, playlists );
 
     }
 
@@ -76,5 +76,9 @@ public class FavouritesFragment extends Fragment{
             throw new ClassCastException(context.toString()
                     + " must implement OnEventStartedListener");
         }
+    }
+
+    public void addFavourite (Playlist playlist){
+
     }
 }

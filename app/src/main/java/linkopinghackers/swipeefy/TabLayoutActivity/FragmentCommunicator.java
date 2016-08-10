@@ -12,4 +12,6 @@ public interface FragmentCommunicator {
 
     public SessionManager getSessionManager ();
 
+    public void addPlaylistToFavourites (Playlist playlist);
+
 }
