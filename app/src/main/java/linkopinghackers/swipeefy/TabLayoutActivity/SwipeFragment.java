@@ -67,6 +67,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
     private String playURI;
     public List<Playlist> playlistlist = new ArrayList();
     private SwipeFragment swipeFragment = this;
+    private Boolean paused;
 
     // Container Activity must implement this interface
    /* public interface OnEventStartedListener {
@@ -107,6 +108,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
             public void onInitialized(Player player) {
                 mPlayer.addConnectionStateCallback(SwipeFragment.this);
                 mPlayer.addPlayerNotificationCallback(SwipeFragment.this);
+                paused = false;
                 //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
 
 
@@ -243,6 +245,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                paused = true;
                 mPlayer.pause();
             }
         });
@@ -250,9 +253,13 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (playlistlist.size()>0){
 
-                mPlayer.play(playlistlist.get(mCardStack.getCurrIndex()).getSongList());
+                if (playlistlist.size()>0 && paused == false){
+
+                mPlayer.play(playlistlist.get(0).getSongList());
+                }else if (playlistlist.size()>0 && paused ==true){
+                    mPlayer.resume();
+                paused = false;
                 }
             }
         });
