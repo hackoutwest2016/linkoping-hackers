@@ -63,7 +63,6 @@ public class FavouritesFragment extends Fragment{
         listView.setAdapter(adapter);
 
 
-
     }
 
     @Override
@@ -79,6 +78,8 @@ public class FavouritesFragment extends Fragment{
                     + " must implement OnEventStartedListener");
         }
     }
+
+
 
     public void addFavourite (Playlist playlist){
         playlists.add(playlist);
