@@ -25,7 +25,7 @@ public class TabLayoutActivity extends AppCompatActivity implements FragmentComm
     public static String POSITION = "POSITION";
     final int PAGE_COUNT = 2;
     private int[] tabIcons = {
-            R.drawable.ic_headphones,
+            R.drawable.ic_swipe,
             R.drawable.ic_heart
     };
     private SampleFragmentPagerAdapter sampleFragmentPagerAdapter;

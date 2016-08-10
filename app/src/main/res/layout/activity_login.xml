@@ -13,67 +13,24 @@
 
     <!-- Login progress -->
 
-    <ScrollView
-        android:id="@+id/login_form"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/swipeefy"
+        android:layout_weight="0"
+        android:longClickable="false"
+        android:layout_gravity="center" />
+
+    <Button
+        android:id="@+id/action_login"
+        style="@style/ButtonTheme"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:id="@+id/email_login_form"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="250dp"
-                android:id="@+id/imageView"
-                android:src="@drawable/swipeefy"
-                android:layout_weight="0"
-                android:longClickable="false"
-                android:layout_gravity="center" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/error_invalid_user_credentials"
-                android:id="@+id/text_error_message"
-                android:layout_gravity="center"
-                android:textColor="@android:color/holo_red_light"
-                android:visibility="invisible"/>
-
-            <Button
-                android:id="@+id/action_login"
-                style="@style/ButtonTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/action_login"
-                android:textStyle="bold"
-                android:layout_weight="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/text_sign_up"
-                android:id="@+id/text_sign_up"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="0" />
-
-            <Button
-                style="@style/ButtonTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/action_sign_up"
-                android:id="@+id/action_sign_up"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="0" />
-
-
-        </LinearLayout>
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/action_login"
+        android:textStyle="bold"
+        android:layout_weight="0"
+        android:layout_gravity="center" />
 
 </LinearLayout>

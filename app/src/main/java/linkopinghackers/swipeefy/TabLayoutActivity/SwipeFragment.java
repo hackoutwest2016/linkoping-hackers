@@ -208,4 +208,12 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
     public void onConnectionMessage(String message) {
         Log.d("MainActivity", "Received connection message: " + message);
     }
+
+    @Override
+    public void onDestroyView() {
+        Spotify.destroyPlayer(this);
+
+        super.onDestroyView();
+    }
+
 }
