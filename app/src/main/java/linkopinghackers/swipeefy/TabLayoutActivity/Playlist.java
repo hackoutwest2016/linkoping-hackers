@@ -13,15 +13,17 @@ import java.net.URL;
  */
 public class Playlist {
     String uri;
-    String image;
+    Bitmap image;
+    String name;
 
-    public Playlist(String uri, String image){
+    public Playlist(String uri, Bitmap image, String name){
         this.uri = uri;
         this.image = image;
+        this.name = name;
     }
 
     public Bitmap getImage() throws IOException {
-        URL url = new URL(image);
+        URL url = new URL("");
         Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
         return bmp;
     }
