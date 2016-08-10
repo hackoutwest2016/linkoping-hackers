@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import linkopinghackers.swipeefy.R;
 
 /**
@@ -16,12 +18,12 @@ import linkopinghackers.swipeefy.R;
 public class PlaylistAdapter {
     Context context;
     int layoutResourceId;
-    Playlist data[] = null;
+    ArrayList<Playlist> playlists = null;
 
-    public PlaylistAdapter(Context context, int layoutResourceId, Playlist[] data) {
+    public PlaylistAdapter(Context context, int layoutResourceId, ArrayList<Playlist> playlists) {
         this.layoutResourceId = layoutResourceId;
         this.context = context;
-        this.data = data;
+        this.playlists = playlists;
     }
 
     //@Override
@@ -45,9 +47,9 @@ public class PlaylistAdapter {
             holder = (PlaylistHolder)row.getTag();
         }
 
-        Playlist playlist = data[position];
-        //holder.txtTitle.setText(playlist.name);
-        //holder.imgIcon.setImageResource(playlist.image);
+        Playlist playlist = playlists.get(position);
+        holder.txtTitle.setText(playlist.name);
+        holder.imgIcon.setImageResource(playlist);
 
         return row;
     }

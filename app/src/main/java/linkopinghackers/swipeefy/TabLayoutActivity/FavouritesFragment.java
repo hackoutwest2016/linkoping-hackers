@@ -58,7 +58,8 @@ public class FavouritesFragment extends Fragment{
         values.add( "Android List View2");
 
         values.add("Android List View3");
-        ArrayList<Playlist> playlists = new Array;
+        ArrayList<Playlist> playlists = new ArrayList<>();
+
 
         PlaylistAdapter adapter = new PlaylistAdapter(getContext(), android.R.layout.simple_list_item_1, playlists );
 
