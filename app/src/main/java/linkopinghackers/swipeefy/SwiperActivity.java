@@ -11,6 +11,8 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
+import org.json.JSONException;
+
 import linkopinghackers.swipeefy.cardstack.CardStack;
 import linkopinghackers.swipeefy.cardstack.CardsDataAdapter;
 
@@ -25,7 +27,13 @@ public class SwiperActivity extends AppCompatActivity implements PlayerNotificat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swiper);
         sessionManager = new SessionManager();
-
+        httpConnection connection = new httpConnection();
+        connection.instatiateQueue(this);
+        try {
+            System.out.print(connection.getPlaylistUri("tlds", sessionManager.getToken()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         mCardStack = (CardStack)findViewById(R.id.container);
 
         mCardStack.setContentResource(R.layout.card_content);
