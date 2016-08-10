@@ -119,6 +119,11 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
                 Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
             }
         });
+
+        for (int i = 0; i <= mCardStack.DEFAULT_STACK_MARGIN;i++){
+
+        getPlaylist("tlds", sessionManager.getToken());
+        }
     }
 
     @Override
@@ -135,10 +140,6 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         final String acc = "Bearer " + accessToken;
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = "https://api.spotify.com/v1/users/" + clientId + "/playlists";
-
-
-
-
 
         //Unclear if param needed when getHeaders is overridden below, commented away
         HashMap<String, String> params = new HashMap<String, String>();
@@ -227,6 +228,9 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
             playlist1 = new Playlist(playlistUri, bmp, name, id, owner);
             playlistlist.add(playlist1);
             mCardAdapter.add(playlist1);
+            if (playlistlist.size()==20){
+                mPlayer.play(playlist1.getSongList());
+            }
 
         }
     }
@@ -243,8 +247,8 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mPlayer.skipToPrevious();
-                getPlaylist("tlds", sessionManager.getToken());
+                mPlayer.skipToPrevious();
+                //getPlaylist("tlds", sessionManager.getToken());
             }
         });
 
@@ -299,7 +303,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         if (playlistlist.size()>0){
 
         mPlayer.play(playlistlist.get(0).getSongList());
-        }
+        } else {mPlayer.pause();}
 
     }
 

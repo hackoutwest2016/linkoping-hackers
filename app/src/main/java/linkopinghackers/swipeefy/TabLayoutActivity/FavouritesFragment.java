@@ -83,7 +83,7 @@ public class FavouritesFragment extends Fragment{
 
                 followPlaylist(playlists.get(i));
                 Snackbar snackbar = Snackbar
-                        .make(view, "You are following this playlist", Snackbar.LENGTH_LONG);
+                        .make(view, "You are now following this playlist", Snackbar.LENGTH_LONG);
 
                 snackbar.show();
                 return false;
@@ -141,6 +141,8 @@ public class FavouritesFragment extends Fragment{
                     + " must implement OnEventStartedListener");
         }
     }
+
+
 
     public void addFavourite (Playlist playlist){
         playlists.add(playlist);
