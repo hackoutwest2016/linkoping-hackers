@@ -1,62 +1,91 @@
 package linkopinghackers.swipeefy.TabLayoutActivity;
 
-import android.app.Activity;
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-
-import linkopinghackers.swipeefy.R;
-
 /**
- * Created by Matilda on 2016-08-10.
+ * Created by Alexander on 2016-07-05.
  */
-public class PlaylistAdapter {
-    Context context;
-    int layoutResourceId;
-    ArrayList<Playlist> playlists = null;
+        import android.content.Context;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.ArrayAdapter;
+        import android.widget.ImageView;
+        import android.widget.ProgressBar;
+        import android.widget.TextView;
 
-    public PlaylistAdapter(Context context, int layoutResourceId, ArrayList<Playlist> playlists) {
-        this.layoutResourceId = layoutResourceId;
+        //import com.google.gson.JsonParser;
+
+        import java.io.IOException;
+        import java.security.acl.Group;
+        import java.util.List;
+
+        import linkopinghackers.swipeefy.R;
+
+        /*import a46elks.a46elksapp.R;
+        import a46elks.a46elksapp.tabLayout.Contacts.Contact;
+        import a46elks.a46elksapp.tabLayout.Groups.Group;
+        import a46elks.a46elksapp.tabLayout.History.HistoryListItem;*/
+
+public class PlaylistAdapter extends ArrayAdapter {
+    private final Context context;
+    private List<Group> valuesGroups;
+    private List<Playlist> valuesPlaylist;
+    private final String LISTVIEWADAPTER_ACTION;
+  //  private JsonParser jsonParser;
+
+    // Might wanna create a specific adapter for history, handling "HistoryEvents" instead of Strings
+
+    public PlaylistAdapter(Context context, String LISTVIEWADAPTER_ACTION, List values) {
+        super(context, -1, values);
         this.context = context;
-        this.playlists = playlists;
+        switch (LISTVIEWADAPTER_ACTION) {
+
+            case "GROUPS":
+                this.valuesGroups = values;
+                break;
+            case "PLAYLIST":
+                this.valuesPlaylist = values;
+                break;
+        }
+        this.LISTVIEWADAPTER_ACTION = LISTVIEWADAPTER_ACTION;
     }
 
-    //@Override
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        PlaylistHolder holder = null;
 
-        if(row == null)
-        {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = null;
+        TextView textView;
 
-            holder = new PlaylistHolder();
-            holder.imgIcon = (ImageView)row.findViewById(R.id.imgIcon);
-            holder.txtTitle = (TextView)row.findViewById(R.id.txtTitle);
+        switch (LISTVIEWADAPTER_ACTION){
 
-            row.setTag(holder);
+
+            case "PLAYLIST":
+                rowView = inflater.inflate(R.layout.list_item, parent, false);
+                textView = (TextView) rowView.findViewById(R.id.text_contact_mobile_number);
+                textView.setText(valuesPlaylist.get(position).getName());
+                ImageView imageView = (ImageView) rowView.findViewById(R.id.listView_contact_picture);
+                try {
+                imageView.setImageBitmap(valuesPlaylist.get(position).getImage());
+
+                }catch (IOException i){
+                    i.printStackTrace();
+                }
+                return rowView;
+
+            case "SETTINGS":
+
+            default:
+                rowView = convertView;
+                break;
+
         }
-        else
-        {
-            holder = (PlaylistHolder)row.getTag();
-        }
 
-        Playlist playlist = playlists.get(position);
-        holder.txtTitle.setText(playlist.name);
-        holder.imgIcon.setImageResource(playlist);
+        //ImageView imageView = (ImageView) rowView.findViewById(R.id.listView_contact_picture);
+        //textView.setText(valuesHistory[position]);
 
-        return row;
+        return rowView;
     }
 
-    static class PlaylistHolder
-    {
-        ImageView imgIcon;
-        TextView txtTitle;
-    }
+
 }
