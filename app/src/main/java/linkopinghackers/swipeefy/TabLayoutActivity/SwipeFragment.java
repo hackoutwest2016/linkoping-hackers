@@ -145,8 +145,10 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
                             JSONObject playlist = response.getJSONArray("items").getJSONObject(0);
                             String imageUri = playlist.getJSONArray("images").getJSONObject(0).getString("url");
                             String playlistUri = playlist.getString("uri");
-                            playlistlist.add(new Playlist(playlistUri, imageUri));
-                            mCardAdapter.notifyDataSetChanged();
+                            Playlist playlist1 = new Playlist(playlistUri, imageUri);
+                            playlistlist.add(playlist1);
+                            mCardAdapter.add(playlist1);
+                            //mCardAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -218,11 +220,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         mCardStack.setStackMargin(20);
 
         mCardAdapter = new CardsDataAdapter(getActivity().getApplicationContext(),0);
-        mCardAdapter.add(R.drawable.swipeefy);
-        mCardAdapter.add(R.drawable.swipeefy);
-        mCardAdapter.add(R.drawable.swipeefy);
-        mCardAdapter.add(R.drawable.swipeefy);
-        mCardAdapter.add(R.drawable.swipeefy);
+//        mCardAdapter.add(R.drawable.swipeefy);
 
         mCardStack.setListener(new CardStackListener());
 
