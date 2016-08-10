@@ -160,7 +160,9 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
                             String imageUri = playlist.getJSONArray("images").getJSONObject(0).getString("url");
                             String playlistUri = playlist.getString("uri");
                             String playlistName = playlist.getString("name");
-                            SetPlaylistImage conn = new SetPlaylistImage(playlistUri, imageUri, playlistName);
+                            String id = playlist.getString("id");
+                            String owner = playlist.getJSONObject("owner").getString("id");
+                            SetPlaylistImage conn = new SetPlaylistImage(playlistUri, imageUri, playlistName, id, owner);
                             conn.execute((Void) null);
 
                             //mCardAdapter.notifyDataSetChanged();
@@ -197,11 +199,15 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         private String playlistUri, imageUri;
         private Bitmap bmp;
         private String name;
+        private String id;
+        private String owner;
 
-        public SetPlaylistImage (String playlistUri, String imageUri, String name){
+        public SetPlaylistImage (String playlistUri, String imageUri, String name, String id, String owner){
             this.playlistUri = playlistUri;
             this.imageUri = imageUri;
             this.name = name;
+            this.id = id;
+            this.owner = owner;
         }
 
         @Override
@@ -219,7 +225,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            playlist1 = new Playlist(playlistUri, bmp, name);
+            playlist1 = new Playlist(playlistUri, bmp, name, id, owner);
             playlistlist.add(playlist1);
             mCardAdapter.add(playlist1);
             if (playlistlist.size()==20){
