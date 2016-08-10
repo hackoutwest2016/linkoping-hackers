@@ -250,7 +250,10 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (playlistlist.size()>0){
+
                 mPlayer.play(playlistlist.get(mCardStack.getCurrIndex()).getSongList());
+                }
             }
         });
 

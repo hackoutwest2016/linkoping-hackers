@@ -27,6 +27,7 @@ public class FavouritesFragment extends Fragment{
     private SessionManager sessionManager;
     private FragmentCommunicator fragmentCommunicator;
     private List<Playlist> playlists;
+    private PlaylistAdapter adapter;
     ListView listView;
 
     @Override
@@ -58,8 +59,9 @@ public class FavouritesFragment extends Fragment{
 
 
         playlists = new ArrayList<>();
-        PlaylistAdapter adapter = new PlaylistAdapter(getContext(), "PLAYLIST", playlists );
+        adapter = new PlaylistAdapter(getContext(), "PLAYLIST", playlists );
         listView.setAdapter(adapter);
+
 
 
     }
@@ -79,6 +81,8 @@ public class FavouritesFragment extends Fragment{
     }
 
     public void addFavourite (Playlist playlist){
+        playlists.add(playlist);
+        adapter.notifyDataSetChanged();
 
     }
 }

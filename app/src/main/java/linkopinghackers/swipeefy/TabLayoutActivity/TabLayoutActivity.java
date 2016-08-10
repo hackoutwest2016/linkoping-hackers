@@ -86,6 +86,7 @@ public class TabLayoutActivity extends AppCompatActivity implements FragmentComm
     @Override
     public void addPlaylistToFavourites(Playlist playlist) {
 
+        favouritesFragment.addFavourite(playlist);
 
     }
 
