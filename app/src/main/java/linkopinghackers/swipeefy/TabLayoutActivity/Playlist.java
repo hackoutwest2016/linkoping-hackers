@@ -15,13 +15,13 @@ public class Playlist {
     String uri;
     Bitmap image;
 
+
     public Playlist(String uri, Bitmap image){
         this.uri = uri;
         this.image = image;
     }
 
     public Bitmap getImage() throws IOException {
-
         return image;
     }
 }

@@ -8,6 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 import linkopinghackers.swipeefy.R;
 import linkopinghackers.swipeefy.SessionManager;
@@ -19,11 +24,11 @@ public class FavouritesFragment extends Fragment{
 
     private SessionManager sessionManager;
     private FragmentCommunicator fragmentCommunicator;
+    ListView listView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //  mPage = getArguments().getInt(ARG_PAGE);
     }
 
@@ -46,6 +51,17 @@ public class FavouritesFragment extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        listView = (ListView) view.findViewById(R.id.list);
+
+        ArrayList<Object> values = new ArrayList<>();
+                values.add( "Android List View");
+        values.add( "Android List View2");
+
+        values.add("Android List View3");
+        ArrayList<Playlist> playlists = new Array;
+
+        PlaylistAdapter adapter = new PlaylistAdapter(getContext(), android.R.layout.simple_list_item_1, playlists );
+
     }
 
     @Override
