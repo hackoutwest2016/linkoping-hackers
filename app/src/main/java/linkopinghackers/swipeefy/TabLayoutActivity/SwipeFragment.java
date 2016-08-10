@@ -151,10 +151,10 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
                         Random random = new Random();
                         try {
 
-                            int rand = random.nextInt(response.getJSONArray("items").length());
+                            int rand = random.nextInt(response.getJSONArray("items").length()-1);
 
                                     JSONObject playlist = response.getJSONArray("items").getJSONObject(rand);
-                            String imageUri = playlist.getJSONArray("images").getJSONObject(rand).getString("url");
+                            String imageUri = playlist.getJSONArray("images").getJSONObject(0).getString("url");
                             String playlistUri = playlist.getString("uri");
                             String playlistName = playlist.getString("name");
                             SetPlaylistImage conn = new SetPlaylistImage(playlistUri, imageUri, playlistName);
