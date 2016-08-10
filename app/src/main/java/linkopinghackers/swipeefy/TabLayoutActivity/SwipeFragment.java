@@ -1,9 +1,8 @@
 package linkopinghackers.swipeefy.TabLayoutActivity;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +12,13 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
@@ -20,15 +26,20 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import linkopinghackers.swipeefy.R;
 import linkopinghackers.swipeefy.SessionManager;
 import linkopinghackers.swipeefy.cardstack.CardStack;
 import linkopinghackers.swipeefy.cardstack.CardStackListener;
 import linkopinghackers.swipeefy.cardstack.CardsDataAdapter;
+import linkopinghackers.swipeefy.HttpConnection;
 
 /**
  * Created by Alexander on 2016-08-10.
@@ -47,6 +58,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
     private SessionManager sessionManager;
     private ImageButton previous, pause, play, next;
     private String playURI;
+    public List<Playlist> playlistlist = new ArrayList();
 
     // Container Activity must implement this interface
    /* public interface OnEventStartedListener {
@@ -88,6 +100,8 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
                 mPlayer.addConnectionStateCallback(SwipeFragment.this);
                 mPlayer.addPlayerNotificationCallback(SwipeFragment.this);
                 mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
+
+
             }
 
             @Override
@@ -107,6 +121,58 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         //   setRetainInstance(true);
         return view;
     }
+    public void getPlaylist(String clientId, String accessToken){
+        final String acc = "Bearer " + accessToken;
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String url = "https://api.spotify.com/v1/users/" + clientId + "/playlists";
+
+
+
+
+
+        //Unclear if param needed when getHeaders is overridden below, commented away
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("Accept", "application/json");
+        params.put("Authorization", "Bearer " + accessToken);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // display response
+                        // Log.d("Response", response.toString());
+
+                        try {
+                            JSONObject playlist = response.getJSONArray("items").getJSONObject(0);
+                            String imageUri = playlist.getJSONArray("images").getJSONObject(0).getString("url");
+                            String playlistUri = playlist.getString("uri");
+                            playlistlist.add(new Playlist(playlistUri, imageUri));
+                            mCardAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Log.d("Error.Response", response);
+                        System.out.println(error.networkResponse);
+                    }
+                }
+        )
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", acc);
+                return headers;
+            }
+        };
+        queue.add(request);
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -120,7 +186,8 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPlayer.skipToPrevious();
+                //mPlayer.skipToPrevious();
+                getPlaylist("tlds", sessionManager.getToken());
             }
         });
 
