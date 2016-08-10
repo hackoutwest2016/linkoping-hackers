@@ -229,7 +229,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
             playlistlist.add(playlist1);
             mCardAdapter.add(playlist1);
             if (playlistlist.size()==20){
-                mPlayer.play(playlist1.getSongList());
+                mPlayer.play(playlistlist.get(0).getSongList());
             }
 
         }
