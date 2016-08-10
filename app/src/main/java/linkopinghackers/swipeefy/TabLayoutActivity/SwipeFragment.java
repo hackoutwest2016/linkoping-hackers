@@ -245,7 +245,6 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                paused = true;
                 mPlayer.pause();
             }
         });
@@ -254,12 +253,10 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
             @Override
             public void onClick(View view) {
 
-                if (playlistlist.size()>0 && paused == false){
+                if (playlistlist.size()>0){
 
-                mPlayer.play(playlistlist.get(0).getSongList());
-                }else if (playlistlist.size()>0 && paused ==true){
                     mPlayer.resume();
-                paused = false;
+
                 }
             }
         });
@@ -288,12 +285,15 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
     }
 
     public void onDiscard(int i){
-        Playlist discarded = playlistlist.get(i);
+        Playlist discarded = playlistlist.get(0);
         //SKICKA TILL FAVOURITES OM DIRECTION = HÖGER
         fragmentCommunicator.addPlaylistToFavourites(discarded);
 
         playlistlist.remove(discarded);
-        play.performClick();
+        if (playlistlist.size()>0){
+
+        mPlayer.play(playlistlist.get(0).getSongList());
+        }
 
     }
 
