@@ -83,7 +83,7 @@ public class FavouritesFragment extends Fragment{
 
                 followPlaylist(playlists.get(i));
                 Snackbar snackbar = Snackbar
-                        .make(coordinatorLayout, "Welcome to AndroidHive", Snackbar.LENGTH_LONG);
+                        .make(view, "You are following this playlist", Snackbar.LENGTH_LONG);
 
                 snackbar.show();
                 return false;
