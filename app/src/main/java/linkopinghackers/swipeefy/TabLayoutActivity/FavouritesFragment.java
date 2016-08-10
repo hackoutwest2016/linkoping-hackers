@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import linkopinghackers.swipeefy.R;
@@ -25,6 +26,7 @@ public class FavouritesFragment extends Fragment{
 
     private SessionManager sessionManager;
     private FragmentCommunicator fragmentCommunicator;
+    private List<Playlist> playlists;
     ListView listView;
 
     @Override
@@ -54,12 +56,10 @@ public class FavouritesFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         listView = (ListView) view.findViewById(R.id.list);
 
-        ArrayList<Object> values = new ArrayList<>();
-                values.add( "Android List View");
-        values.add( "Android List View2");
 
-        values.add("Android List View3");
-        ArrayList<Playlist> playlists = new ArrayList<>();
+        playlists = new ArrayList<>();
+        PlaylistAdapter adapter = new PlaylistAdapter(getContext(), "PLAYLIST", playlists );
+        listView.setAdapter(adapter);
 
 
     }

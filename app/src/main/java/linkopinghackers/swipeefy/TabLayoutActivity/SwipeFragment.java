@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import linkopinghackers.swipeefy.R;
 import linkopinghackers.swipeefy.SessionManager;
@@ -147,12 +148,16 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
                     public void onResponse(JSONObject response) {
                         // display response
                         // Log.d("Response", response.toString());
-
+                        Random random = new Random();
                         try {
-                            JSONObject playlist = response.getJSONArray("items").getJSONObject(0);
-                            String imageUri = playlist.getJSONArray("images").getJSONObject(0).getString("url");
+
+                            int rand = random.nextInt(response.getJSONArray("items").length());
+
+                                    JSONObject playlist = response.getJSONArray("items").getJSONObject(rand);
+                            String imageUri = playlist.getJSONArray("images").getJSONObject(rand).getString("url");
                             String playlistUri = playlist.getString("uri");
-                            SetPlaylistImage conn = new SetPlaylistImage(playlistUri, imageUri);
+                            String playlistName = playlist.getString("name");
+                            SetPlaylistImage conn = new SetPlaylistImage(playlistUri, imageUri, playlistName);
                             conn.execute((Void) null);
 
                             //mCardAdapter.notifyDataSetChanged();
@@ -188,10 +193,12 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         private Playlist playlist1;
         private String playlistUri, imageUri;
         private Bitmap bmp;
+        private String name;
 
-        public SetPlaylistImage (String playlistUri, String imageUri){
+        public SetPlaylistImage (String playlistUri, String imageUri, String name){
             this.playlistUri = playlistUri;
             this.imageUri = imageUri;
+            this.name = name;
         }
 
         @Override
@@ -209,7 +216,7 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            playlist1 = new Playlist(playlistUri, bmp);
+            playlist1 = new Playlist(playlistUri, bmp, name);
             playlistlist.add(playlist1);
             mCardAdapter.add(playlist1);
 

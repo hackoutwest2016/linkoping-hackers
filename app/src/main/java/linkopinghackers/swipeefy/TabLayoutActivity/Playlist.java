@@ -14,11 +14,13 @@ import java.net.URL;
 public class Playlist {
     String uri;
     Bitmap image;
+    String name;
 
 
-    public Playlist(String uri, Bitmap image){
+    public Playlist(String uri, Bitmap image, String name){
         this.uri = uri;
         this.image = image;
+        this.name = name;
     }
 
     public Bitmap getImage() throws IOException {
@@ -26,4 +28,5 @@ public class Playlist {
     }
 
     public String getSongList () {return uri;}
+    public String getName(){return name;}
 }
