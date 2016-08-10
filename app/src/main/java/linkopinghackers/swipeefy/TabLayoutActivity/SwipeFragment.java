@@ -1,6 +1,9 @@
 package linkopinghackers.swipeefy.TabLayoutActivity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -29,6 +32,9 @@ import com.spotify.sdk.android.player.Spotify;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,9 +151,9 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
                             JSONObject playlist = response.getJSONArray("items").getJSONObject(0);
                             String imageUri = playlist.getJSONArray("images").getJSONObject(0).getString("url");
                             String playlistUri = playlist.getString("uri");
-                            Playlist playlist1 = new Playlist(playlistUri, imageUri);
-                            playlistlist.add(playlist1);
-                            mCardAdapter.add(playlist1);
+                            SetPlaylistImage conn = new SetPlaylistImage(playlistUri, imageUri);
+                            conn.execute((Void) null);
+
                             //mCardAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -174,6 +180,42 @@ public class SwipeFragment extends android.support.v4.app.Fragment implements Pl
             }
         };
         queue.add(request);
+
+    }
+
+    public class SetPlaylistImage extends AsyncTask<Void, Void, Boolean>{
+        private Playlist playlist1;
+        private String playlistUri, imageUri;
+        private Bitmap bmp;
+
+        public SetPlaylistImage (String playlistUri, String imageUri){
+            this.playlistUri = playlistUri;
+            this.imageUri = imageUri;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+            URL url = new URL(imageUri);
+
+            bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            }catch (IOException m){
+                m.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            playlist1 = new Playlist(playlistUri, bmp);
+            playlistlist.add(playlist1);
+            mCardAdapter.add(playlist1);
+
+        }
+
+
+
     }
 
     @Override

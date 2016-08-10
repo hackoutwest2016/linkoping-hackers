@@ -7,6 +7,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 import linkopinghackers.swipeefy.R;
 import linkopinghackers.swipeefy.TabLayoutActivity.Playlist;
 
@@ -23,7 +25,12 @@ public class CardsDataAdapter extends ArrayAdapter<Playlist> {
     public View getView(int position, final View contentView, ViewGroup parent){
         //supply the layout for your card
         ImageView v = (ImageView) (contentView.findViewById(R.id.content));
-        //v.setImageResource(getItem(position));
+        try{
+        v.setImageBitmap(getItem(position).getImage());
+
+        }catch (IOException i){
+            i.printStackTrace();
+        }
         return contentView;
     }
 }
