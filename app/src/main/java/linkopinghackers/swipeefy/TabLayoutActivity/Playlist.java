@@ -15,12 +15,16 @@ public class Playlist {
     String uri;
     Bitmap image;
     String name;
+    String id;
+    String owner;
 
 
-    public Playlist(String uri, Bitmap image, String name){
+    public Playlist(String uri, Bitmap image, String name, String id, String owner){
         this.uri = uri;
         this.image = image;
         this.name = name;
+        this.id = id;
+        this.owner = owner;
     }
 
     public Bitmap getImage() throws IOException {
