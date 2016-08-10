@@ -11,4 +11,5 @@ public class Playlist {
         this.uri = uri;
         this.image = image;
     }
+
 }
