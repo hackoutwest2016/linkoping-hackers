@@ -20,7 +20,8 @@
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".SwiperActivity"></activity>
+        <activity android:name=".SwiperActivity" />
+        <activity android:name=".TabLayoutActivity.TabLayoutActivity"></activity>
     </application>
 
 </manifest>

@@ -47,6 +47,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import linkopinghackers.swipeefy.TabLayoutActivity.TabLayoutActivity;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class LoginActivity extends AppCompatActivity implements PlayerNotificationCallback, ConnectionStateCallback {
@@ -128,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
                 AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                         AuthenticationResponse.Type.TOKEN,
                         REDIRECT_URI);
-                builder.setScopes(new String[]{});
+                builder.setScopes(new String[]{"streaming", "user-read-private"});
                 AuthenticationRequest request = builder.build();
 
                 AuthenticationClient.openLoginActivity(loginActivity, REQUEST_CODE, request);
@@ -163,7 +165,7 @@ public class LoginActivity extends AppCompatActivity implements PlayerNotificati
                 SessionManager sessionManager = new SessionManager();
                 sessionManager.createLoginSession(context, response.getAccessToken());
 
-                Intent intentLogin = new Intent(this, SwiperActivity.class);
+                Intent intentLogin = new Intent(this, TabLayoutActivity.class);
                 startActivity(intentLogin);
             }
         }

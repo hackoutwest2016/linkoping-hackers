@@ -142,6 +142,7 @@ public class CardStack extends RelativeLayout {
             @Override
             public  boolean onDragStart(MotionEvent e1, MotionEvent e2,
                                         float distanceX, float distanceY) {
+
                 if (canSwipe) {
                     mCardAnimator.drag(e1, e2, distanceX, distanceY);
                 }
@@ -302,4 +303,5 @@ public class CardStack extends RelativeLayout {
     public int getStackSize() {
         return mNumVisible;
     }
+
 }

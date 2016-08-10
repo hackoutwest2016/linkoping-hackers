@@ -3,6 +3,9 @@ package linkopinghackers.swipeefy;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
@@ -12,6 +15,7 @@ import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
 import linkopinghackers.swipeefy.cardstack.CardStack;
+import linkopinghackers.swipeefy.cardstack.CardStackListener;
 import linkopinghackers.swipeefy.cardstack.CardsDataAdapter;
 
 public class SwiperActivity extends AppCompatActivity implements PlayerNotificationCallback, ConnectionStateCallback {
@@ -19,6 +23,8 @@ public class SwiperActivity extends AppCompatActivity implements PlayerNotificat
     private CardStack mCardStack;
     private CardsDataAdapter mCardAdapter;
     private SessionManager sessionManager;
+    private ImageButton previous, pause, play, next;
+    private String playURI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,49 +32,58 @@ public class SwiperActivity extends AppCompatActivity implements PlayerNotificat
         setContentView(R.layout.activity_swiper);
         sessionManager = new SessionManager();
 
+        previous = (ImageButton) findViewById(R.id.action_previous);
+        pause = (ImageButton) findViewById(R.id.action_pause);
+        play = (ImageButton) findViewById(R.id.action_play);
+        next = (ImageButton) findViewById(R.id.action_next);
+
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPlayer.skipToPrevious();
+            }
+        });
+
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPlayer.pause();
+            }
+        });
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPlayer.play(playURI);
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPlayer.skipToNext();
+            }
+        });
+
         mCardStack = (CardStack)findViewById(R.id.container);
 
         mCardStack.setContentResource(R.layout.card_content);
         mCardStack.setStackMargin(20);
 
         mCardAdapter = new CardsDataAdapter(getApplicationContext(),0);
-        mCardAdapter.add("test1");
-        mCardAdapter.add("test2");
-        mCardAdapter.add("test3");
-        mCardAdapter.add("test4");
-        mCardAdapter.add("test5");
+        mCardAdapter.add(R.drawable.swipeefy);
+        mCardAdapter.add(R.drawable.swipeefy);
+        mCardAdapter.add(R.drawable.swipeefy);
+        mCardAdapter.add(R.drawable.swipeefy);
+        mCardAdapter.add(R.drawable.swipeefy);
 
-        mCardStack.setListener(new CardStack.CardEventListener() {
-            @Override
-            public boolean swipeEnd(int section, float distance) {
-                return false;
-            }
-
-            @Override
-            public boolean swipeStart(int section, float distance) {
-                return false;
-            }
-
-            @Override
-            public boolean swipeContinue(int section, float distanceX, float distanceY) {
-                return false;
-            }
-
-            @Override
-            public void discarded(int mIndex, int direction) {
-
-            }
-
-            @Override
-            public void topCardTapped() {
-
-            }
-        });
+        mCardStack.setListener(new CardStackListener());
 
         mCardStack.setAdapter(mCardAdapter);
 
         Config playerConfig = new Config(this, sessionManager.getToken(), sessionManager.getClientId());
         mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+
             @Override
             public void onInitialized(Player player) {
                 mPlayer.addConnectionStateCallback(SwiperActivity.this);

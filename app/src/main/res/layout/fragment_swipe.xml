@@ -8,13 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="linkopinghackers.swipeefy.SwiperActivity"
+    tools:context="linkopinghackers.swipeefy.TabLayoutActivity.TabLayoutActivity"
     android:orientation="vertical">
-
-
-
-
-
 
     <linkopinghackers.swipeefy.cardstack.CardStack
         android:id="@+id/container"
@@ -56,11 +51,6 @@
             android:id="@+id/action_next"
             android:src="@drawable/ic_next" />
     </LinearLayout>
-
-
-
-
-
 
 
 </LinearLayout>
